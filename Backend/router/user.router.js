@@ -1,30 +1,18 @@
 import express from 'express';
-import { UserInputValidation } from '../controllers/User.auth.js';
-import User from '../Db/Schema/User.Schema.js';
+import { UserInputValidation, verifyToken } from '../middleware/auth_middleware.js';
+import { all_User, User_Login, User_Sin_in, User_Logout } from '../controllers/User.controller.js';
 const userRouter = express.Router();
 
-userRouter.post('/sign-up', UserInputValidation, async (req, res) => {
-    const { FirstName, LastName, email, password } = req.body;
-    const hashPassword = await User.hashPassword(password);
+// route to create new user
+userRouter.post('/sign-up', UserInputValidation, User_Sin_in);
 
-    const user = await User.create({
-        FirstName,
-        LastName,
-        email,
-        password: hashPassword,
-    });
+// route to login user
+userRouter.post('/login', User_Login);
 
-    const token = user.generateAuthToken(user._id);
+// route to logout user
+userRouter.post('/logout', User_Logout);
 
-    res.status(201).json({
-        message: "User created successfully",
-        user: user,
-        token: token
-    });
-
-});
-
-
-
-
+//router to get all user
+userRouter.get('/allUser', verifyToken, all_User);
+    
 export default userRouter;

@@ -21,10 +21,10 @@ The request body must be in JSON format and include the following fields:
 #### Example
 ```json
 {
-  "FirstName": "John",
-  "LastName": "Doe",
-  "email": "john.doe@example.com",
-  "password": "securepassword"
+    "FirstName": "John",
+    "LastName": "Doe",
+    "email": "john.doe@example.com",
+    "password": "securepassword"
 }
 ```
 
@@ -38,14 +38,14 @@ The response will be in JSON format and include the following fields:
 #### Example
 ```json
 {
-  "message": "User created successfully",
-  "user": {
-    "_id": "60d0fe4f5311236168a109ca",
-    "FirstName": "John",
-    "LastName": "Doe",
-    "email": "john.doe@example.com"
-  },
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    "message": "User created successfully",
+    "user": {
+        "_id": "60d0fe4f5311236168a109ca",
+        "FirstName": "John",
+        "LastName": "Doe",
+        "email": "john.doe@example.com"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```
 
@@ -57,17 +57,74 @@ The error response will be in JSON format and include the following fields:
 #### Example
 ```json
 {
-  "errors": [
-    { "field": "email", "message": "Invalid email format" },
-    { "field": "password", "message": "Password must be at least 6 characters long" }
-  ]
+    "errors": [
+        { "field": "email", "message": "Invalid email format" },
+        { "field": "password", "message": "Password must be at least 6 characters long" }
+    ]
 }
 ```
 
 #### User Already Exists
 ```json
 {
-  "message": "User already exists"
+    "message": "User already exists"
 }
 ```
 
+## User Login Endpoint
+
+### Endpoint
+`POST /api/v1/user/login`
+
+### Description
+This endpoint authenticates a user and returns a JWT token upon successful login.
+
+### Request Body
+The request body must be in JSON format and include the following fields:
+
+- **email** (string): The registered email address.
+- **password** (string): The user's password.
+
+#### Example
+```json
+{
+    "email": "john.doe@example.com",
+    "password": "securepassword"
+}
+```
+
+### Response
+The response will be in JSON format and include the following fields:
+
+- **message** (string): A success message.
+- **user** (object): The user object.
+- **token** (string): The JWT token.
+
+#### Example
+```json
+{
+    "message": "Login successful",
+    "user": {
+        "_id": "60d0fe4f5311236168a109ca",
+        "FirstName": "John",
+        "LastName": "Doe",
+        "email": "john.doe@example.com"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+### Error Response
+#### Invalid Credentials
+```json
+{
+    "message": "Invalid email or password"
+}
+```
+
+#### User Not Found
+```json
+{
+    "message": "User not found"
+}
+```
