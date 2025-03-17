@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 import userRouter from './router/user.router.js';
 import { connectDb } from "./Db/index.js";
 import cookieParser from 'cookie-parser';
-
+import captainRouter from './router/Captain.router.js';
 
 dotenv.config()
 app.use(express.json());
@@ -14,7 +14,7 @@ app.use(cookieParser());
 
 // all the root routers
 app.use('/api/v1/user', userRouter);
-
+app.use('/api/v1/captain', captainRouter);
 
 
 

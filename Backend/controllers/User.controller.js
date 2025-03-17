@@ -14,7 +14,7 @@ export const User_Sin_in = async (req, res, next) => {
             password: hashPassword,
         });
 
-        const token = await user.generateAuthToken(user._id);
+        const token = await user.generateAuthToken();
 
         // Set cookie with secure options
         res.cookie('token', token);
@@ -39,13 +39,14 @@ export const User_Sin_in = async (req, res, next) => {
 }
 
 // User login controller
-export const User_Login = async (req, res, next) => {
+export const User_Login = async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email: email }).select('+password');
         if (!user) {
             return res.status(400).json({ message: "Invalid email or password" });
         }
+
         const isPasswordValid = await user.comparePassword(password);
         if (!isPasswordValid) {
             return res.status(400).json({ message: "Invalid email or password" });
@@ -87,10 +88,11 @@ export const User_Logout = async (req, res) => {
         res.clearCookie('token');
         const token = req.cookies.token || req.headers.authorization.split(" ")[1];
         await BlackListToken.create({ token: token });
-        
 
         res.status(200).json({ message: "Logged out successfully" });
+
     } catch (error) {
+
         console.error("Error in User_Logout:", error);
         return res.status(500).json({ message: "Internal server error" });
     }

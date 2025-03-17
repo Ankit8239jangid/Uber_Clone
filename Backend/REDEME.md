@@ -128,3 +128,16 @@ The response will be in JSON format and include the following fields:
     "message": "User not found"
 }
 ```
+### Logout Endpoint
+
+#### Endpoint
+`POST /user/logout`
+
+#### Description
+Logs out the currently authenticated user by invalidating the JWT token.
+
+#### Request Headers
+- **Authorization**: Bearer token (required)
+
+#### Response
+- **Success Response**:
