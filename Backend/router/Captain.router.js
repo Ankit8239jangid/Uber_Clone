@@ -14,7 +14,7 @@ import {
 const captainRouter = express.Router();
 
 // Captain registration route
-captainRouter.post('/create', createCaptainValidation, createCaptain);
+captainRouter.post('/register', createCaptainValidation, createCaptain);
 
 // Captain login route
 captainRouter.post('/login', loginCaptainValidation, verifyCaptainToken, loginCaptain);

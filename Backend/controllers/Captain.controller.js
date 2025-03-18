@@ -65,6 +65,7 @@ export const loginCaptain = async (req, res) => {
             vehicle: captain.vehicle,
             location: captain.location
         };
+        
 
         res.status(200).json({
             message: "Login successful",
@@ -91,7 +92,7 @@ export const logoutCaptain = async (req, res) => {
         await BlackListToken.create({ token });
 
         // Clear cookie
-        res.cookie('token', '');
+        res.clearCookie('token');
 
         res.status(200).json({ message: "Logged out successfully" });
     } catch (error) {

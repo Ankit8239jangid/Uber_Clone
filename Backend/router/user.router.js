@@ -13,6 +13,6 @@ userRouter.post('/login', User_Login);
 userRouter.post('/logout', User_Logout);
 
 //router to get all user
-userRouter.get('/allUser', verifyToken, all_User);
-    
+userRouter.get('/profile', verifyToken, all_User);
+
 export default userRouter;
