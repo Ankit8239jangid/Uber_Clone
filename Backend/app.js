@@ -1,32 +1,39 @@
-import express from "express"
-const app = express();
-import dotenv from 'dotenv'
-import userRouter from './router/user.router.js';
+import express from "express";
+import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import userRouter from "./router/user.router.js";
+import captainRouter from "./router/Captain.router.js";
 import { connectDb } from "./Db/index.js";
-import cookieParser from 'cookie-parser';
-import captainRouter from './router/Captain.router.js';
 
-dotenv.config()
+dotenv.config(); // Load environment variables
+
+const app = express();
+
+// Middleware
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+// Root routers
+app.use("/api/v1/user", userRouter);
+app.use("/api/v1/captain", captainRouter);
 
-// all the root routers
-app.use('/api/v1/user', userRouter);
-app.use('/api/v1/captain', captainRouter);
+const PORT = process.env.PORT || 4000; // ✅ Use default port if undefined
 
+app.get("/", (_, res) => {
+    res.send("WELCOME TO SUBSCRIPTION TRACKER API 😀");
+});
 
-
-const PORT = process.env.PORT
-app.get('/', (_, res) => {
-    res.send('WELLCOM TO SBCRIPTION TRACKER API 😀')
-})
-
-
-
-app.listen(PORT, async () => {
-    console.log(`server is running on => http://localhost:${PORT}`)
-    await connectDb()
-})
-
+// ✅ Ensure DB connection before starting the server
+connectDb()
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`🚀 Server is running on => http://localhost:${PORT}`);
+        });
+    })
+    .catch((err) => {
+        console.error("❌ Database connection failed:", err);
+        process.exit(1); // Exit process if DB connection fails
+    });

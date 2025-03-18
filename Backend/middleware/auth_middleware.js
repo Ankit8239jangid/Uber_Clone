@@ -6,7 +6,7 @@ import BlackListToken from '../Db/Schema/BlackListToken.Schema.js';
 
 dotenv.config();
 
-// Define validation schema
+// **Define validation schema**
 const signupSchema = zod.object({
     FirstName: zod.string().min(3, "First Name must be at least 3 characters long"),
     LastName: zod.string().min(3, "Last Name must be at least 3 characters long"),
@@ -14,60 +14,63 @@ const signupSchema = zod.object({
     password: zod.string().min(6, "Password must be at least 6 characters long"),
 });
 
-// Middleware to validate user input
+// **Middleware to validate user input**
 export async function UserInputValidation(req, res, next) {
     try {
         // Validate input fields
         const result = signupSchema.safeParse(req.body);
+        
         if (!result.success) {
             const errors = result.error.errors.map(error => ({
-                field: error.path[0],
+                field: error.path?.[0] || "unknown",
                 message: error.message
             }));
-            return res.status(400).json({ errors });
+            return res.status(400).json({ success: false, errors });
         }
 
         // Check if user already exists
         const existingUser = await User.findOne({ email: req.body.email });
         if (existingUser) {
-            return res.status(400).json({ message: "User already exists" });
+            return res.status(400).json({ success: false, message: "User already exists" });
         }
 
         next();
     } catch (error) {
-        console.error("Error in UserInputValidation:", error);
-        return res.status(500).json({ message: "Internal server error" });
+        console.error("❌ Error in UserInputValidation:", error);
+        return res.status(500).json({ success: false, message: "Internal server error" });
     }
 }
 
-// Token verification middleware
+// **Token verification middleware**
 export const verifyToken = async (req, res, next) => {
     try {
         // Ensure cookie-parser middleware is used in your app
         if (!req.cookies) {
-            console.warn("req.cookies is undefined. Ensure cookie-parser middleware is applied.");
+            console.warn("⚠️ req.cookies is undefined. Ensure `cookie-parser` middleware is applied.");
         }
 
-        // Extract token from cookies or authorization header
-        const token = req.cookies?.token || (req.headers.authorization?.startsWith("Bearer ") ? req.headers.authorization.split(" ")[1] : null);
+        // Extract token from cookies or Authorization header
+        const token =
+            req.cookies?.token ||
+            (req.headers.authorization?.startsWith("Bearer ") ? req.headers.authorization.split(" ")[1] : null);
 
         if (!token) {
-            return res.status(401).json({ message: "Authorization token required" });
+            return res.status(401).json({ success: false, message: "Authorization token required" });
         }
 
-        const blackListedToken = await BlackListToken.findOne({ token: token });
+        // Check if token is blacklisted
+        const blackListedToken = await BlackListToken.findOne({ token });
         if (blackListedToken) {
-            return res.status(401).json({ message: "Unauthorized" });
+            return res.status(401).json({ success: false, message: "Unauthorized - Token is blacklisted" });
         }
 
-        
-        // Verify token
+        // **Verify token**
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded._id;
 
         next();
     } catch (error) {
-        console.error("JWT Verification Error:", error.message);
-        return res.status(401).json({ message: "Invalid or expired token" });
+        console.error("❌ JWT Verification Error:", error.message);
+        return res.status(401).json({ success: false, message: "Invalid or expired token" });
     }
 };

@@ -33,14 +33,16 @@ const UserSchema = new mongoose.Schema({
     },
     sokitId: {
         type: String,
-        // required: [true, 'SokitId is required'],
-        // unique: true,
+        unique: true, // Ensure uniqueness
+        sparse: true, // Allows multiple documents to have `null` values (avoids duplicate key error)
+        default: function () {
+            return new mongoose.Types.ObjectId().toString(); // Generate a unique string if not provided
+        }
     }
 }, { timestamps: true });
 
 UserSchema.methods.generateAuthToken = function () {
     const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
-    
     return token;
 }
 
