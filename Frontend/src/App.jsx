@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LandingPage from "./Components/Pages/Home/LandingPage";
-import CaptanLoginPage from "./Components/auth/Captain_auth/User_Login";
-import Captin_Signup from "./Components/auth/Captain_auth/Captin_Signup";
-import Dashbord from "./Components/Dashbord/Dashbord";
-import { Home } from "lucide-react";
+import Layout from "./Components/Pages/Layout";
+import CaptanLoginPage from "./Components/auth/User_Login";
+import User_Signup from "./Components/auth/User_Signup";
+import Dashbord from "./Components/Dashboard/Dashbord";
+
 import Hero from "./Components/Pages/Home/Hero";
 
 export default function App() {
@@ -11,12 +11,12 @@ export default function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LandingPage />} >
-            <Route path="/" element={<Hero/>} />
+          <Route path="/" element={<Layout />} >
+            <Route path="/" element={<Hero />} />
             <Route path="/dashbord" element={<Dashbord />} />
           </Route>
-            <Route path="/signup" element={<Captin_Signup />} />
-            <Route path="/login" element={<CaptanLoginPage />} />
+          <Route path="/signup" element={<User_Signup />} />
+          <Route path="/login" element={<CaptanLoginPage />} />
         </Routes>
       </BrowserRouter>
 

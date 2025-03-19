@@ -4,7 +4,7 @@ import { Twitter } from 'lucide-react';
 import whomanSinupimage from '/Signup.webp'
 import axios from 'axios';
 
-const Captin_Signup = () => {
+const User_Signup = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         FirstName: '',
@@ -134,5 +134,5 @@ const Captin_Signup = () => {
     );
 };
 
-export default Captin_Signup;
+export default User_Signup;
 
