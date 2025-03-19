@@ -17,7 +17,7 @@ const Hero = () => {
                     <h1 className="text-4xl md:text-5xl font-bold">Go anywhere with Uber</h1>
                     <p className="text-lg">Request a ride, hop in, and go.</p>
 
-                    <form onSubmit={() => navigate('/signup')} className='space-y-4 relative w-3/2  '>
+                    <form onSubmit={() => navigate('/user-signup')} className='space-y-4 relative w-3/2  '>
                         <div className="relative flex items-center">
                             <input type="text" required placeholder="Enter location"
                                 className="w-full p-3 rounded bg-white text-black placeholder-gray-500 focus:ring-2 focus:ring-gray-400" />
@@ -63,7 +63,7 @@ const Hero = () => {
                             <div>
                                 <h3 className="text-lg font-semibold">{item.title}</h3>
                                 <p className="mt-2 text-wrap">{item.description}</p>
-                                <button onClick={() => navigate('/signup')} className="mt-4 bg-white text-black px-4 py-2 rounded hover:bg-gray-200">Details</button>
+                                <button onClick={() => navigate('/user-signup')} className="mt-4 bg-white text-black px-4 py-2 rounded hover:bg-gray-200">Details</button>
                             </div>
                             <img src={item.imageUrl} className="h-24 w-24" alt={item.title} />
                         </div>
@@ -79,12 +79,12 @@ const Hero = () => {
                         <p className="text-lg">{section.description}</p>
                         <div className="space-x-4">
                             <button
-                                onClick={() => navigate(section.buttonText === 'Log in to your account' ? '/login' : '/signup')}
+                                onClick={() => navigate(section.buttonText === 'Log in to your account' ? '/user-login' : '/user-signup')}
                                 className="bg-black text-white px-6 py-3 rounded hover:bg-gray-800"
                             >
                                 {section.buttonText}
                             </button>
-                            {section.linkText && <NavLink to="/signup" className="text-gray-500 hover:underline">{section.linkText}</NavLink>}
+                            {section.linkText && <NavLink to="/user-signup" className="text-gray-500 hover:underline">{section.linkText}</NavLink>}
                         </div>
                     </div>
                     <div className="w-full md:w-1/2">

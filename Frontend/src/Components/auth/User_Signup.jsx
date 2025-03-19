@@ -20,7 +20,7 @@ const User_Signup = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:4000/api/v1/user/sign-up', formData);
+            const response = await axios.post(`${import.meta.env.VITE_BASE_API_URL}/user/sign-up`, formData);
             localStorage.setItem('token', response.data.user.token); // Store the token   
             if (response.data?.user) {
                 navigate(`/dashbord?signup=true&id=${response.data.user.id}&name=${response.data.user.firstname}`);
@@ -29,7 +29,7 @@ const User_Signup = () => {
             }
         } catch (error) {
             console.error('Signup error:', error);
-            alert("Sign-up failed. Please check your credentials.");
+            alert(response.data.massage);
         }
     };
 
@@ -98,7 +98,7 @@ const User_Signup = () => {
                         </button>
                     </div>
                     <p className="text-center text-gray-600 mt-4 text-sm">
-                        Already Have an account? <button onClick={() => navigate('/login')} className="text-blue-500 hover:underline ml-1">Go to Login</button>
+                        Already Have an account? <button onClick={() => navigate('/user-login')} className="text-blue-500 hover:underline ml-1">Go to Login</button>
                     </p>
                     <p className="text-center text-gray-600 text-sm mt-2">Terms & Conditions</p>
                 </div>

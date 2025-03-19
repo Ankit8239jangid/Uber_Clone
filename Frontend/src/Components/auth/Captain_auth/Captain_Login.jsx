@@ -4,7 +4,7 @@ import { Github, Twitter, FacebookIcon } from 'lucide-react';
 import video from '/video.mp4';
 import axios from 'axios';
 
-const UserLoginPage = () => {
+const CaptanLoginPage = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [loginFormData, setLoginFormData] = useState({
@@ -19,18 +19,22 @@ const UserLoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BASE_API_URL}/user/user-login`, loginFormData, {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_API_URL}/captain/user-login`, loginFormData, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
+          Authorization: `Bearer ${localStorage.getItem('captaintoken')}`
         }
       });
 
-      localStorage.setItem('token', response.data.user.token); // Store the token   
-      navigate(`/dashbord?Login=true&id=${response.data.user._id}&name=${response.data.user.FirstName}`);
+      localStorage.setItem('captaintoken', response.data.captain.token); // Store the token   
+      navigate(`/dashbord?Login=true&id=${response.data.captain._id}&name=${response.data.captain.FirstName}`);
 
     } catch (error) {
-      console.error('Login error:', error);
-      alert("Login failed. Please check your credentials.");
+      if (error.response?.data?.errors) {
+        alert(error.response.data.errors[0].message)
+      }
+      else {
+        console.log('sonthing went woring')
+      }
     }
   };
 
@@ -47,7 +51,7 @@ const UserLoginPage = () => {
               </div>
             </div>
 
-            <h2 className="text-2xl font-bold text-center mb-2">Welcome back</h2>
+            <h2 className="text-2xl font-bold text-center mb-2">Welcome back Captain</h2>
             <p className="text-center text-gray-600 mb-6">
               Join Uber today and take a ride to your destination.
             </p>
@@ -120,7 +124,7 @@ const UserLoginPage = () => {
 
               <div className="text-center text-sm">
                 <span className="text-gray-600">Don't have an account?</span>
-                <button onClick={() => navigate('/user-signup')} className="text-blue-500 hover:underline ml-1">Go to Sign-up</button>
+                <button onClick={() => navigate('/Captain-Registration')} className="text-blue-500 hover:underline ml-1">Go to Sign-up</button>
               </div>
             </form>
           </div>
@@ -143,4 +147,4 @@ const UserLoginPage = () => {
   );
 };
 
-export default UserLoginPage;
+export default CaptanLoginPage;

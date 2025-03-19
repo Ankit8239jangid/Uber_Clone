@@ -7,7 +7,7 @@ const userRouter = express.Router();
 userRouter.post('/sign-up', UserInputValidation, User_Sin_in);
 
 // route to login user
-userRouter.post('/login', User_Login);
+userRouter.post('/user-login', User_Login);
 
 // route to logout user
 userRouter.post('/logout', User_Logout);

@@ -74,7 +74,7 @@ The error response will be in JSON format and include the following fields:
 ## User Login Endpoint
 
 ### Endpoint
-`POST /api/v1/user/login`
+`POST /api/v1/user/user-login`
 
 ### Description
 This endpoint authenticates a user and returns a JWT token upon successful login.

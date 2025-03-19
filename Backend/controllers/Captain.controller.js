@@ -17,7 +17,7 @@ export const createCaptain = async (req, res) => {
         // Remove sensitive information before sending response
         const captainResponse = {
             _id: captain._id,
-            fullname: captain.fullname,
+            firstname: captain.firstname,
             email: captain.email,
             status: captain.status,
             vehicle: captain.vehicle,
@@ -26,13 +26,16 @@ export const createCaptain = async (req, res) => {
 
         res.status(201).json({
             message: "Captain created successfully",
-            captain: captainResponse
+            captain: captainResponse,
+            token: token
         });
     } catch (error) {
         console.error("Error in createCaptain:", error);
         return res.status(500).json({ message: "Internal server error" });
     }
 }
+
+
 
 export const loginCaptain = async (req, res) => {
     try {
@@ -59,16 +62,17 @@ export const loginCaptain = async (req, res) => {
         // Remove sensitive information before sending response
         const captainResponse = {
             _id: captain._id,
-            fullname: captain.fullname,
+            firstname: captain.firstname,
             email: captain.email,
             status: captain.status,
             vehicle: captain.vehicle,
-            location: captain.location
+            location: captain.location,
+            token: token
         };
-        
+
 
         res.status(200).json({
-            message: "Login successful",
+            message: " captain Login successful",
             captain: captainResponse
         });
     } catch (error) {

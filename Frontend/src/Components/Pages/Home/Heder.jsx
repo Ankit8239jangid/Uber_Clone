@@ -25,10 +25,10 @@ const Header = () => {
 
                 {/* Actions & Hamburger */}
                 <div className="flex items-center space-x-4">
-                    <button onClick={() => navigator('/login')} className="border border-white px-4 py-2 rounded hover:bg-white hover:text-black transition duration-300 hidden md:inline">
+                    <button onClick={() => navigator('/user-login')} className="border border-white px-4 py-2 rounded hover:bg-white hover:text-black transition duration-300 hidden md:inline">
                         Log In
                     </button>
-                    <button onClick={() => navigator('/signup')} className="bg-white text-black px-4 py-2 rounded hover:bg-gray-200 transition duration-300 hidden md:inline">
+                    <button onClick={() => navigator('/user-signup')} className="bg-white text-black px-4 py-2 rounded hover:bg-gray-200 transition duration-300 hidden md:inline">
                         Sign Up
                     </button>
                     <button className="md:hidden fixed right-6 z-30" onClick={() => setIsOpen(!isOpen)}>
@@ -44,10 +44,10 @@ const Header = () => {
                         {link}
                     </NavLink>
                 ))}
-                <button onClick={() => navigator('/login')} className="mt-6 border border-white px-6 py-3 rounded hover:bg-white hover:text-black transition duration-300">
+                <button onClick={() => navigator('/user-login')} className="mt-6 border border-white px-6 py-3 rounded hover:bg-white hover:text-black transition duration-300">
                     Log In
                 </button>
-                <button onClick={() => navigator('/signup')} className="mt-4 bg-white text-black px-6 py-3 rounded hover:bg-gray-200 transition duration-300">
+                <button onClick={() => navigator('/user-signup')} className="mt-4 bg-white text-black px-6 py-3 rounded hover:bg-gray-200 transition duration-300">
                     Sign Up
                 </button>
             </div>
