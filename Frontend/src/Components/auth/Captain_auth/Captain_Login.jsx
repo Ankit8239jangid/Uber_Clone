@@ -19,14 +19,22 @@ const CaptanLoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BASE_API_URL}/captain/user-login`, loginFormData, {
+    const token =  localStorage.getItem('captaintoken')
+      const response = await axios.post(`${import.meta.env.VITE_BASE_API_URL}/captain/caption-login`, loginFormData, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('captaintoken')}`
+          Authorization: `Bearer ${token}`
         }
       });
 
-      localStorage.setItem('captaintoken', response.data.captain.token); // Store the token   
-      navigate(`/dashbord?Login=true&id=${response.data.captain._id}&name=${response.data.captain.FirstName}`);
+      if (!token) {
+        navigate('/')
+      }
+
+      if (response.data?.caption) {
+        setLoginFormData(response.data.caption)
+        localStorage.setItem('token', response.data.caption.token); // Store the token   
+        navigate(`/dashbord?login=true&id=${response.data.caption.VITE_BASE_API_URLid}&name=${response.data.caption.firstname}`);
+      }
 
     } catch (error) {
       if (error.response?.data?.errors) {

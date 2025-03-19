@@ -15,18 +15,21 @@ const UserLoginPage = () => {
   const handleChange = (e) => {
     setLoginFormData({ ...loginFormData, [e.target.name]: e.target.value });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BASE_API_URL}/user/user-login`, loginFormData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      });
 
-      localStorage.setItem('token', response.data.user.token); // Store the token   
-      navigate(`/dashbord?Login=true&id=${response.data.user._id}&name=${response.data.user.FirstName}`);
+      const token = localStorage.getItem('token');
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_API_URL}/user/user-login`,
+        loginFormData,
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+
+      localStorage.setItem('token', response.data.user.token); // Store new token  
+      navigate(`/dashbord?login=true&id=${response.data.user._id}&name=${response.data.user.FirstName}`);
 
     } catch (error) {
       console.error('Login error:', error);

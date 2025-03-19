@@ -19,20 +19,41 @@ const User_Signup = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+    
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_API_URL}/user/sign-up`, formData);
-            localStorage.setItem('token', response.data.user.token); // Store the token   
-            if (response.data?.user) {
-                navigate(`/dashbord?signup=true&id=${response.data.user.id}&name=${response.data.user.firstname}`);
-            } else {
-                console.error('User data missing in response');
+            const response = await axios.post(
+                `${import.meta.env.VITE_BASE_API_URL}/user/sign-up`,
+                formData
+            );
+    
+            const user = response.data?.user;
+            if (!user || !user.token) {
+                return navigate('/'); // Redirect to home if signup fails
             }
+    
+            // ✅ Store refresh token in an HTTP-only cookie (server-side)
+            localStorage.setItem("token", user.token); // Store access token
+    
+            // ✅ Set user data in state
+            setFormData({
+                _id: user._id,
+                FirstName: user.FirstName,
+                LastName: user.LastName,
+                email: user.email
+            });
+    
+            // ✅ Navigate to dashboard
+            navigate(`/dashbord?signup=true&id=${user._id}&name=${user.FirstName}`);
+    
         } catch (error) {
-            console.error('Signup error:', error);
-            alert(response.data.massage);
+            console.error("❌ Signup error:", error);
+    
+            // ✅ Improved error handling
+            const errorMessage = error.response?.data?.message || "Signup failed. Please try again.";
+            alert(errorMessage);
         }
     };
-
+    
     return (
         <div className="min-h-screen bg-gradient-to-b from-zinc-200 to-green-300 flex items-center justify-center p-4">
             <div className="bg-white rounded-xl shadow-lg overflow-hidden w-full max-w-4xl flex flex-col md:flex-row">
