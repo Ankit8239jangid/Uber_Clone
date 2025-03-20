@@ -1,59 +1,19 @@
-import React, { useState } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 import { Twitter } from 'lucide-react';
 import whomanSinupimage from '/Signup.webp'
-import axios from 'axios';
+
+import { useAuth } from '../context/AuthContext';
+
 
 const User_Signup = () => {
+
+    const { captainSignupFormData, handleSignupChange, handleCaptainSignup } = useAuth();
+
+
+
     const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        FirstName: '',
-        LastName: '',
-        email: '',
-        password: ''
-    });
-
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-    
-        try {
-            const response = await axios.post(
-                `${import.meta.env.VITE_BASE_API_URL}/user/sign-up`,
-                formData
-            );
-    
-            const user = response.data?.user;
-            if (!user || !user.token) {
-                return navigate('/'); // Redirect to home if signup fails
-            }
-    
-            // ✅ Store refresh token in an HTTP-only cookie (server-side)
-            localStorage.setItem("token", user.token); // Store access token
-    
-            // ✅ Set user data in state
-            setFormData({
-                _id: user._id,
-                FirstName: user.FirstName,
-                LastName: user.LastName,
-                email: user.email
-            });
-    
-            // ✅ Navigate to dashboard
-            navigate(`/dashbord?signup=true&id=${user._id}&name=${user.FirstName}`);
-    
-        } catch (error) {
-            console.error("❌ Signup error:", error);
-    
-            // ✅ Improved error handling
-            const errorMessage = error.response?.data?.message || "Signup failed. Please try again.";
-            alert(errorMessage);
-        }
-    };
-    
+ 
     return (
         <div className="min-h-screen bg-gradient-to-b from-zinc-200 to-green-300 flex items-center justify-center p-4">
             <div className="bg-white rounded-xl shadow-lg overflow-hidden w-full max-w-4xl flex flex-col md:flex-row">
@@ -65,21 +25,21 @@ const User_Signup = () => {
                     </div>
                     <h2 className="text-2xl font-bold text-gray-900 mb-2">Create an account</h2>
                     <p className="text-gray-600 mb-6">Sign-up To get 50% off on your first ride!</p>
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                    <form onSubmit={handleCaptainSignup} className="space-y-4">
                         <div className="flex gap-2">
                             <input
                                 name="FirstName"
                                 type="text"
-                                value={formData.FirstName}
-                                onChange={handleChange}
+                                value={captainSignupFormData.FirstName}
+                                onChange={handleSignupChange}
                                 placeholder="First Name"
                                 className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
                             />
                             <input
                                 name="LastName"
                                 type="text"
-                                value={formData.LastName}
-                                onChange={handleChange}
+                                value={captainSignupFormData.LastName}
+                                onChange={handleSignupChange}
                                 placeholder="Last Name"
                                 className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
                             />
@@ -87,16 +47,16 @@ const User_Signup = () => {
                         <input
                             name="email"
                             type="email"
-                            value={formData.email}
-                            onChange={handleChange}
+                            value={captainSignupFormData.email}
+                            onChange={handleSignupChange}
                             placeholder="Email"
                             className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
                         />
                         <input
                             name="password"
                             type="password"
-                            value={formData.password}
-                            onChange={handleChange}
+                            value={captainSignupFormData.password}
+                            onChange={handleSignupChange}
                             placeholder="Password"
                             required
                             className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"

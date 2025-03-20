@@ -17,7 +17,7 @@ const captainRouter = express.Router();
 captainRouter.post('/register', createCaptainValidation, createCaptain);
 
 // Captain login route
-captainRouter.post('/user-login', loginCaptainValidation, verifyCaptainToken, loginCaptain);
+captainRouter.post('/login', loginCaptainValidation, verifyCaptainToken, loginCaptain);
 
 // Captain logout route
 captainRouter.post('/logout', verifyCaptainToken, logoutCaptain);

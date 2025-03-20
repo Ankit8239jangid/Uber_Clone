@@ -15,7 +15,7 @@ export const User_Sin_in = async (req, res) => {
             LastName,
             email,
             password: hashPassword,
-           
+
         });
 
         const token = await user.generateAuthToken();
@@ -91,21 +91,26 @@ export const User_Login = async (req, res) => {
 // ✅ Fix: Improve error handling in `User_Logout`
 export const User_Logout = async (req, res) => {
     try {
-        // ✅ Fix: Check if token exists before splitting
         const token = req.cookies.token || (req.headers.authorization ? req.headers.authorization.split(" ")[1] : null);
 
         if (!token) return res.status(400).json({ message: "No token provided" });
 
-        res.clearCookie('token');
+        res.clearCookie("token", {
+            httpOnly: true,
+            secure: true, // Use `false` if running locally
+            sameSite: "None" // Ensure it works across different origins
+        });
+
         await BlackListToken.create({ token });
 
-        res.status(200).json({ message: "Logged out successfully" });
+        return res.status(200).json({ message: "Logged out successfully" });
 
     } catch (error) {
         console.error("Error in User_Logout:", error);
         return res.status(500).json({ message: "Internal server error" });
     }
 };
+
 
 // ✅ Fix: Handle errors in `all_User`
 export const all_User = async (req, res) => {

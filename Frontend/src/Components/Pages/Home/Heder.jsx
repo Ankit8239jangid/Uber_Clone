@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Menu, X } from "lucide-react";
-import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
-import UserLogout from "../../auth/userLogout";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+
 
 const navLinks = ["Ride", "Drive", "Business", "About"];
 
 const Header = () => {
-    const [searchParams] = useSearchParams();
-    const login = searchParams.get('login') === 'true'; // ✅ Ensure proper boolean check
+    const { handleLogout, isLogin } = useAuth(); // ✅ Correct useContext usage
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
 
@@ -28,8 +28,10 @@ const Header = () => {
 
                 {/* Actions & Hamburger */}
                 <div className="flex items-center space-x-4">
-                    {login ? (
-                        <UserLogout /> // ✅ Show logout button if logged in
+                    {isLogin ? ( // ✅ Fixed incorrect variable name (was `login`)
+                        <button onClick={handleLogout} className="border border-white px-4 py-2 rounded hover:bg-white hover:text-black transition duration-300 hidden md:inline">
+                            Log Out
+                        </button>
                     ) : (
                         <>
                             <button onClick={() => navigate('/user-login')} className="border border-white px-4 py-2 rounded hover:bg-white hover:text-black transition duration-300 hidden md:inline">
@@ -54,13 +56,9 @@ const Header = () => {
                     </NavLink>
                 ))}
 
-                {login ? (
-                    <UserLogout />
-                ) : (
-                    <button onClick={() => navigate('/user-login')} className="mt-6 border border-white px-6 py-3 rounded hover:bg-white hover:text-black transition duration-300">
-                        Log In
-                    </button>
-                )}
+                <button onClick={() => isLogin ? handleLogout() : navigate('/user-login')} className="mt-6 border border-white px-6 py-3 rounded hover:bg-white hover:text-black transition duration-300">
+                    {isLogin ? "Log Out" : "Log In"} {/* ✅ Fixed text issue */}
+                </button>
 
                 <button onClick={() => navigate('/user-signup')} className="mt-4 bg-white text-black px-6 py-3 rounded hover:bg-gray-200 transition duration-300">
                     Sign Up

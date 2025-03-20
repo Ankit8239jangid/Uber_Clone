@@ -1,41 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Github, Twitter, FacebookIcon } from 'lucide-react';
 import video from '/video.mp4';
-import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 const UserLoginPage = () => {
+
+
+const { loginFormData, handleLoginChange, handleLogin ,showPassword,setShowPassword } = useAuth();
+
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
-  const [loginFormData, setLoginFormData] = useState({
-    email: '',
-    password: ''
-  });
-
-  const handleChange = (e) => {
-    setLoginFormData({ ...loginFormData, [e.target.name]: e.target.value });
-  };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-
-      const token = localStorage.getItem('token');
-      const response = await axios.post(
-        `${import.meta.env.VITE_BASE_API_URL}/user/user-login`,
-        loginFormData,
-        {
-          headers: { Authorization: `Bearer ${token}` }
-        }
-      );
-
-      localStorage.setItem('token', response.data.user.token); // Store new token  
-      navigate(`/dashbord?login=true&id=${response.data.user._id}&name=${response.data.user.FirstName}`);
-
-    } catch (error) {
-      console.error('Login error:', error);
-      alert("Login failed. Please check your credentials.");
-    }
-  };
 
   return (
     <div className="flex h-screen w-screen md:p-4 p-2  bg-green-100">
@@ -55,12 +29,12 @@ const UserLoginPage = () => {
               Join Uber today and take a ride to your destination.
             </p>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleLogin} className="space-y-4">
               <div>
                 <input
                   name="email"
                   value={loginFormData.email}
-                  onChange={handleChange}
+                  onChange={handleLoginChange}
                   type="email"
                   placeholder="Email"
                   required
@@ -73,7 +47,7 @@ const UserLoginPage = () => {
                   name="password"
                   type={showPassword ? "text" : "password"}
                   value={loginFormData.password}
-                  onChange={handleChange}
+                  onChange={handleLoginChange}
                   placeholder="Password"
                   required
                   className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"

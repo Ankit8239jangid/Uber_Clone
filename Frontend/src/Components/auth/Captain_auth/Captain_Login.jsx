@@ -1,50 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { Github, Twitter, FacebookIcon } from 'lucide-react';
 import video from '/video.mp4';
-import axios from 'axios';
+import { useAuth } from '../../context/AuthContext';
+
 
 const CaptanLoginPage = () => {
+
+  const { captainLoginFormData, handleCaptainLoginChange, handleCaptainLogin ,showPassword  ,setShowPassword} = useAuth();
+
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
-  const [loginFormData, setLoginFormData] = useState({
-    email: '',
-    password: ''
-  });
-
-  const handleChange = (e) => {
-    setLoginFormData({ ...loginFormData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-    const token =  localStorage.getItem('captaintoken')
-      const response = await axios.post(`${import.meta.env.VITE_BASE_API_URL}/captain/caption-login`, loginFormData, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-
-      if (!token) {
-        navigate('/')
-      }
-
-      if (response.data?.caption) {
-        setLoginFormData(response.data.caption)
-        localStorage.setItem('token', response.data.caption.token); // Store the token   
-        navigate(`/dashbord?login=true&id=${response.data.caption.VITE_BASE_API_URLid}&name=${response.data.caption.firstname}`);
-      }
-
-    } catch (error) {
-      if (error.response?.data?.errors) {
-        alert(error.response.data.errors[0].message)
-      }
-      else {
-        console.log('sonthing went woring')
-      }
-    }
-  };
 
   return (
     <div className="flex h-screen w-screen md:p-4 p-2  bg-green-100">
@@ -64,12 +29,12 @@ const CaptanLoginPage = () => {
               Join Uber today and take a ride to your destination.
             </p>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleCaptainLogin} className="space-y-4">
               <div>
                 <input
                   name="email"
-                  value={loginFormData.email}
-                  onChange={handleChange}
+                  value={captainLoginFormData.email}
+                  onChange={handleCaptainLoginChange}
                   type="email"
                   placeholder="Email"
                   required
@@ -80,9 +45,9 @@ const CaptanLoginPage = () => {
               <div className="relative">
                 <input
                   name="password"
-                  type={showPassword ? "text" : "password"}
-                  value={loginFormData.password}
-                  onChange={handleChange}
+                  type={setShowPassword ? "text" : "password"}
+                  value={captainLoginFormData.password}
+                  onChange={handleCaptainLoginChange}
                   placeholder="Password"
                   required
                   className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
