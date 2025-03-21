@@ -1,11 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Github, Twitter, Facebook } from 'lucide-react'; // Fixed import
+import { Github, Twitter, Facebook } from 'lucide-react'; // Fixed import name
 import video from '/video.mp4';
 import { useAuth } from '../../context/AuthContext';
 
-const CaptainLoginPage = () => {
-    const { captainLoginFormData, handleCaptainLoginChange, handleCaptainLogin, showPassword, setShowPassword } = useAuth();
+const UserLoginPage = () => {
+    const { loginFormData, handleLoginChange, handleLogin, showPassword, setShowPassword, isLoading } = useAuth();
     const navigate = useNavigate();
 
     return (
@@ -34,17 +34,17 @@ const CaptainLoginPage = () => {
                             </div>
                         </div>
 
-                        <h2 className="text-2xl font-bold text-center mb-2">Welcome back, Captain</h2>
+                        <h2 className="text-2xl font-bold text-center mb-2">Welcome back</h2>
                         <p className="text-center text-gray-600 mb-6">
-                            Log in to Uber and start driving.
+                            Log in to Uber and take a ride to your destination.
                         </p>
 
-                        <form onSubmit={handleCaptainLogin} className="space-y-4">
+                        <form onSubmit={handleLogin} className="space-y-4">
                             <div>
                                 <input
                                     name="email"
-                                    value={captainLoginFormData.email}
-                                    onChange={handleCaptainLoginChange}
+                                    value={loginFormData.email}
+                                    onChange={handleLoginChange}
                                     type="email"
                                     placeholder="Email"
                                     required
@@ -55,9 +55,9 @@ const CaptainLoginPage = () => {
                             <div className="relative">
                                 <input
                                     name="password"
-                                    type={showPassword ? 'text' : 'password'} // Fixed condition
-                                    value={captainLoginFormData.password}
-                                    onChange={handleCaptainLoginChange}
+                                    type={showPassword ? 'text' : 'password'}
+                                    value={loginFormData.password}
+                                    onChange={handleLoginChange}
                                     placeholder="Password"
                                     required
                                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
@@ -91,9 +91,10 @@ const CaptainLoginPage = () => {
 
                             <button
                                 type="submit"
-                                className="w-full active:scale-50 transition-all bg-green-500 text-white py-3 rounded-lg font-medium hover:bg-green-600 "
+                                className="w-full active:scale-50 transition-all  bg-green-500 text-white py-3 rounded-lg font-medium hover:bg-green-600 "
                             >
-                                Login with Email
+
+                                {isLoading ? 'loging' : ' Login with Email'}
                             </button>
 
                             <div className="text-xs text-gray-500 text-center">
@@ -142,10 +143,10 @@ const CaptainLoginPage = () => {
                             <div className="text-center text-sm mt-4">
                                 <span className="text-gray-600">Don't have an account?</span>
                                 <button
-                                    onClick={() => navigate('/captain-registration')}
+                                    onClick={() => navigate('/user-signup')}
                                     className="text-blue-500 hover:underline ml-1"
                                 >
-                                    Go to Sign-up
+                                    {isLoading ? 'loging' : ' Go to Sign-up'}
                                 </button>
                             </div>
                         </form>
@@ -156,4 +157,4 @@ const CaptainLoginPage = () => {
     );
 };
 
-export default CaptainLoginPage;
+export default UserLoginPage;

@@ -15,7 +15,7 @@ const Hero = () => {
                     <h1 className="text-4xl md:text-5xl font-bold">Go anywhere with Uber</h1>
                     <p className="text-lg">Request a ride, hop in, and go.</p>
 
-                    <form onSubmit={() => navigate('/user-signup')} className="space-y-4 w-full">
+                    <form onSubmit={() => navigate('/Landing')} className="space-y-4 w-full">
                         <div className="relative flex items-center">
                             <input
                                 type="text"
@@ -63,13 +63,13 @@ const Hero = () => {
                                 <h3 className="text-lg font-semibold">{item.title}</h3>
                                 <p className="mt-2">{item.description}</p>
                                 <button
-                                    onClick={() => navigate('/user-signup')}
+                                    onClick={() => navigate('/Landing')}
                                     className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition"
                                 >
                                     Details
                                 </button>
                             </div>
-                            <img src={item.imageUrl} className="h-24 w-24 object-cover rounded-lg" alt={item.title} />
+                            <img loading='lazy' src={item.imageUrl} className="h-24 w-24 object-cover rounded-lg" alt={item.title} />
                         </div>
                     ))}
                 </div>
@@ -86,20 +86,20 @@ const Hero = () => {
                         <p className="text-lg">{section.description}</p>
                         <div className="space-x-4">
                             <button
-                                onClick={() => navigate(section.buttonText === 'Log in to your account' ? '/user-login' : '/user-signup')}
+                                onClick={() => navigate(section.buttonText === 'Log in to your account' ? '/user-login' : '/Landing')}
                                 className="bg-black text-white px-6 py-3 rounded hover:bg-gray-800"
                             >
                                 {section.buttonText}
                             </button>
                             {section.linkText && (
-                                <NavLink to="/user-signup" className="text-gray-500 hover:underline">
+                                <NavLink to={"/Landing"} className="text-gray-500 hover:underline">
                                     {section.linkText}
                                 </NavLink>
                             )}
                         </div>
                     </div>
                     <div className="w-full md:w-1/2">
-                        <img src={section.imageUrl} alt={section.altText} className="rounded-lg mx-auto object-cover" />
+                        <img loading='lazy' src={section.imageUrl} alt={section.altText} className="rounded-lg mx-auto object-cover" />
                     </div>
                 </section>
             ))}
@@ -110,7 +110,7 @@ const Hero = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {businessData.apps.map((app, index) => (
                         <div key={index} className="bg-white p-6 rounded-lg shadow">
-                            <img src={app.imageUrl} alt={app.altText} className="mx-auto mb-4 object-cover rounded-lg" />
+                            <img loading='lazy' src={app.imageUrl} alt={app.altText} className="mx-auto mb-4 object-cover rounded-lg" />
                             <p className="text-lg">{app.title}</p>
                             <p className="text-gray-500">{app.description}</p>
                         </div>

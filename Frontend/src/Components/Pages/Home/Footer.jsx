@@ -49,8 +49,8 @@ const Footer = () => {
                 <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-4 mb-6">
                     {/* App Store Badges */}
                     <div className="flex space-x-4">
-                        <NavLink href="#"><img src={Googelplay} alt="Google Play" className="h-10" /></NavLink>
-                        <NavLink href="#"><img src={Apps_Stor} alt="App Store" className="h-10" /></NavLink>
+                        <NavLink href="#"><img loading='lazy' src={Googelplay} alt="Google Play" className="h-10" /></NavLink>
+                        <NavLink href="#"><img loading='lazy' src={Apps_Stor} alt="App Store" className="h-10" /></NavLink>
                     </div>
 
                 </div>

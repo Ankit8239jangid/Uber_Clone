@@ -58,7 +58,7 @@ export const User_Login = async (req, res) => {
         if (!user) return res.status(400).json({ message: "Invalid email or password" });
 
         const isPasswordValid = await user.comparePassword(password);
-        if (!isPasswordValid) return res.status(400).json({ message: "Invalid email or password" });
+        if (!isPasswordValid) return res.status(400).json({ message: "Invalid email or password"  });
 
         const token = user.generateAuthToken();
 
@@ -84,7 +84,7 @@ export const User_Login = async (req, res) => {
 
     } catch (error) {
         console.error("Error in User_Login:", error);
-        return res.status(500).json({ message: "Internal server error" });
+        return res.status(500).json({ message: error });
     }
 };
 

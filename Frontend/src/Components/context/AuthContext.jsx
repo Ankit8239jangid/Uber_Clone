@@ -7,9 +7,11 @@ const AuthContext = createContext();
 
 // AuthProvider Component
 export const AuthProvider = ({ children }) => {
-    const navigate = useNavigate(); // ✅ Defined once at the top
-    const [isLogin, setIsLogin] = useState(() => !!localStorage.getItem('token')); // ✅ Initialize from localStorage
+    const navigate = useNavigate();
+    const [toast, setToast] = useState({ show: true, message: '', type: '' });
+    const [isLogin, setIsLogin] = useState(() => !!localStorage.getItem('token') || !!localStorage.getItem('captaintoken'));
     const [showPassword, setShowPassword] = useState(false);
+    const [isLoading, setIsLoading] = useState(false); // Fixed typo: isloding → isLoading
     const [loginFormData, setLoginFormData] = useState({ email: '', password: '' });
     const [signupFormData, setSignupFormData] = useState({ FirstName: '', LastName: '', email: '', password: '' });
     const [captainLoginFormData, setCaptainLoginFormData] = useState({ email: '', password: '' });
@@ -18,201 +20,211 @@ export const AuthProvider = ({ children }) => {
         lastname: '',
         email: '',
         password: '',
-        vehicle: {
-            color: '',
-            plate: '',
-            capacity: '',
-            vehicleType: ''
-        },
+        vehicle: { color: '', plate: '', capacity: '', vehicleType: '' },
         location: ''
     });
 
-
-    // For User Login Form
-    const handleLoginChange = (e) => {
+    // Generic Input Handler
+    const handleInputChange = (setFormData) => (e) => {
         const { name, value } = e.target;
-        setLoginFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
-    // For User Signup Form
-    const handleSignupChange = (e) => {
-        const { name, value } = e.target;
-        setSignupFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
-    // For Captain Login Form
-    const handleCaptainLoginChange = (e) => {
-        const { name, value } = e.target;
-        setCaptainLoginFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
-
-    // For Captain Signup Form
-    const handleCaptainSignupChange = (e) => {
-        const { name, value } = e.target;
-    
-        setCaptainSignupFormData((prev) => {
-            if (name.startsWith("vehicle")) {
+        setFormData((prev) => {
+            if (name.startsWith('vehicle.')) {
+                const vehicleField = name.split('.')[1];
                 return {
                     ...prev,
-                    vehicle: {
-                        ...prev.vehicle,
-                        [name]: value
-                    }
-                };
-            } else {
-                return {
-                    ...prev,
-                    [name]: value
+                    vehicle: { ...prev.vehicle, [vehicleField]: value }
                 };
             }
+            return { ...prev, [name]: value };
         });
     };
-    
 
+    // Specific handlers
+    const handleLoginChange = handleInputChange(setLoginFormData);
+    const handleSignupChange = handleInputChange(setSignupFormData);
+    const handleCaptainLoginChange = handleInputChange(setCaptainLoginFormData);
+    const handleCaptainSignupChange = handleInputChange(setCaptainSignupFormData);
 
-    // Handle user login
+    // Handle User Login
     const handleLogin = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         try {
-            const token = localStorage.getItem('token');
-            const response = await axios.post(
-                `${import.meta.env.VITE_BASE_API_URL}/user/user-login`,
-                loginFormData,
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
-            localStorage.setItem('token', response.data.user.token);
-            navigate(`/dashboard?login=true&id=${response.data.user._id}&name=${response.data.user.FirstName}`);
+            const response = await axios.post(`${import.meta.env.VITE_BASE_API_URL}/user/user-login`, loginFormData, {
+                headers: { Authorization: `Bearer ${localStorage.getItem('token') || ''}` }
+            });
+            const { token, _id, FirstName } = response.data.user || {};
+            if (!token) throw new Error('No token received');
+            localStorage.setItem('token', token);
+            setIsLogin(true);
+            setLoginFormData({ email: '', password: '' });
+            setToast({ show: true, message: `Welcome back, ${FirstName}!`, type: 'success' });
+            navigate(`/dashboard?login=true&id=${_id}&name=${FirstName}`);
         } catch (error) {
-            console.error('Login error:', error);
-            alert('Login failed. Please check your credentials.');
+            const errorMessage = error.response?.data?.message || 'Login failed. Please check your credentials.';
+            console.error('Login error:', errorMessage); // Log for debugging
+            setToast({ show: true, message: 'jkjkjk', type: 'error' });
+        } finally {
+            setIsLoading(false);
         }
     };
 
-    // Handle user signup
+    // Handle User Signup
     const handleSignup = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         try {
-            const response = await axios.post(
-                `${import.meta.env.VITE_BASE_API_URL}/user/sign-up`,
-                signupFormData
-            );
-            const user = response.data?.user;
-            if (!user || !user.token) {
-                return navigate('/');
-            }
-            localStorage.setItem('token', user.token);
-            setSignupFormData({ _id: user._id, FirstName: user.FirstName, LastName: user.LastName, email: user.email });
-            navigate(`/dashboard?signup=true&id=${user._id}&name=${user.FirstName}`);
+            const response = await axios.post(`${import.meta.env.VITE_BASE_API_URL}/user/sign-up`, signupFormData);
+            const { token, _id, FirstName } = response.data.user || {};
+            if (!token) throw new Error('No token received');
+            localStorage.setItem('token', token);
+            setIsLogin(true);
+            setSignupFormData({ FirstName: '', LastName: '', email: '', password: '' });
+            setToast({ show: true, message: `Welcome, ${FirstName}! Signup successful.`, type: 'success' });
+            navigate(`/dashboard?signup=true&id=${_id}&name=${FirstName}`);
         } catch (error) {
-            console.error('Signup error:', error);
-            alert(error.response?.data?.message || 'Signup failed. Please try again.');
+            const errorMessage = error.response?.data?.message || 'Signup failed. Please try again.';
+            setToast({ show: true, message: errorMessage, type: 'error' });
+            console.error('Signup error:', error); // Log for debugging
+        } finally {
+            setIsLoading(false);
         }
     };
 
-    // Handle captain login
+    // Handle Captain Login
     const handleCaptainLogin = async (e) => {
-        const token = localStorage.getItem('captaintoken')
         e.preventDefault();
+        setIsLoading(true);
         try {
-            const response = await axios.post(
-                `${import.meta.env.VITE_BASE_API_URL}/captain/login`,
-                captainLoginFormData, { headers: { Authorization: `Bearer ${token}` } }
-            );
-
-            const captain = response.data?.captain; // Ensure correct response structure
-            if (!captain || !captain.token) {
-                alert('Invalid credentials');
-                return;
-            }
-
-            localStorage.setItem('captaintoken', captain.token);
-
-            // Redirect to dashboard with captain details
-            navigate(`/dashboard?login=true&id=${captain._id}&name=${captain.firstname}`);
-
+            const response = await axios.post(`${import.meta.env.VITE_BASE_API_URL}/captain/login`, captainLoginFormData, {
+                headers: { Authorization: `Bearer ${localStorage.getItem('captaintoken') || ''}` }
+            });
+            const { token, _id, firstname } = response.data.captain || {};
+            if (!token) throw new Error('No token received');
+            localStorage.setItem('captaintoken', token);
+            setIsLogin(true);
+            setCaptainLoginFormData({ email: '', password: '' });
+            setToast({ show: true, message: `Welcome back, ${firstname}!`, type: 'success' });
+            navigate(`/captain-dashboard?login=true&id=${_id}&name=${firstname}`);
         } catch (error) {
-            console.error("Login failed:", error);
-            alert(error.response?.data?.errors?.[0]?.message || 'Something went wrong');
+            const errorMessage = error.response?.data?.message || 'Invalid email or password';
+            setToast({ show: true, message: errorMessage, type: 'error' });
+            console.error('Captain login error:', error); // Log for debugging
+        } finally {
+            setIsLoading(false);
         }
     };
 
-
-    // Handle captain registration
+    // Handle Captain Signup
     const handleCaptainSignup = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         try {
-            const formattedData = {
-                firstname: captainSignupFormData.firstname,
-                lastname: captainSignupFormData.lastname,
-                email: captainSignupFormData.email,
-                password: captainSignupFormData.password,
-                vehicle: {
-                    color: captainSignupFormData.vehicle.color,
-                    plate: captainSignupFormData.vehicle.plate,
-                    capacity: captainSignupFormData.vehicle.capacity,
-                    vehicleType: captainSignupFormData.vehicle.vehicleType
-                },
-                location: captainSignupFormData.location
-            };
-
-            const response = await axios.post(
-                `${import.meta.env.VITE_BASE_API_URL}/captain/register`,
-                formattedData
-            );
-
-            // Store captain's token
-            localStorage.setItem('captaintoken', response.data.captain.token);
-
-            // Navigate to dashboard
-            navigate(`/dashboard?captain_register=true&id=`);
-
+            const response = await axios.post(`${import.meta.env.VITE_BASE_API_URL}/captain/register`, captainSignupFormData);
+            const { _id, firstname } = response.data.captain || {};
+            if (!response.data.token) throw new Error('No token received');
+            localStorage.setItem('captaintoken', response.data.token);
+            setIsLogin(true);
+            setCaptainSignupFormData({
+                firstname: '',
+                lastname: '',
+                email: '',
+                password: '',
+                vehicle: { color: '', plate: '', capacity: '', vehicleType: '' },
+                location: ''
+            });
+            setToast({ show: true, message: `Welcome, ${firstname}! Captain signup successful.`, type: 'success' });
+            navigate(`/captain-dashboard?captain_register=true&id=${_id}&name=${firstname}`);
         } catch (error) {
-            console.error("Signup failed:", error.response?.data || error);
-            alert(error.response?.data?.errors?.[0]?.message || 'Something went wrong');
+            const errorMessage = error.response?.data?.errors?.[0]?.message || 'Captain signup failed.';
+            setToast({ show: true, message: errorMessage, type: 'error' });
+            console.error('Captain signup error:', error); // Log for debugging
+        } finally {
+            setIsLoading(false);
         }
     };
 
+    // Handle Logout
     const handleLogout = async () => {
+        setIsLoading(true);
         try {
-            // Call backend logout API
-            await axios.post(`${import.meta.env.VITE_BASE_API_URL}/user/logout`, {}, {
-                withCredentials: true, // Ensures cookies are sent with the request
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}` // If using token-based auth
-                }
+            const token = localStorage.getItem('token');
+            const captainToken = localStorage.getItem('captaintoken');
+            const url = token
+                ? `${import.meta.env.VITE_BASE_API_URL}/user/logout`
+                : `${import.meta.env.VITE_BASE_API_URL}/captain/logout`;
+            const authToken = token || captainToken;
+
+            await axios.post(url, {}, {
+                headers: { Authorization: `Bearer ${authToken}` },
+                withCredentials: true
             });
 
-            // Remove token from local storage
             localStorage.removeItem('token');
-
-            // Redirect to login page
+            localStorage.removeItem('captaintoken');
+            setIsLogin(false);
+            setToast({ show: true, message: 'Logged out successfully!', type: 'success' });
             navigate('/');
-
         } catch (error) {
-            console.error("Logout failed:", error.response?.data?.message || error.message);
+            const errorMessage = error.response?.data?.message || 'Logout failed. Please try again.';
+            setToast({ show: true, message: errorMessage, type: 'error' });
+            console.error('Logout error:', error); // Log for debugging
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // Handle Dashboard Navigation
+    const handleDashboard = () => {
+        const token = localStorage.getItem('token');
+        const captainToken = localStorage.getItem('captaintoken');
+
+        if (captainToken) {
+            setIsLogin(true);
+            navigate('/captain-dashboard');
+        } else if (token) {
+            setIsLogin(true);
+            navigate('/dashboard');
+        } else {
+            setIsLogin(false);
+            navigate('/', { replace: true });
         }
     };
 
     return (
-        <AuthContext.Provider value={{
-            showPassword, setShowPassword,
-            loginFormData, signupFormData, captainLoginFormData, captainSignupFormData,
-            handleSignupChange, handleLoginChange, handleCaptainSignupChange, handleCaptainLoginChange, handleLogin, handleSignup, handleCaptainLogin, handleCaptainSignup, handleLogout, isLogin, setIsLogin
-        }}>
+        <AuthContext.Provider
+            value={{
+                showPassword,
+                setShowPassword,
+                loginFormData,
+                signupFormData,
+                captainLoginFormData,
+                captainSignupFormData,
+                handleLoginChange,
+                handleSignupChange,
+                handleCaptainLoginChange,
+                handleCaptainSignupChange,
+                handleLogin,
+                handleSignup,
+                handleCaptainLogin,
+                handleCaptainSignup,
+                handleLogout,
+                isLogin,
+                setIsLogin,
+                isLoading, // Updated to match fixed typo
+                handleDashboard,
+                toast,
+                setToast
+            }}
+        >
             {children}
         </AuthContext.Provider>
     );
 };
 
-// Custom Hook to use AuthContext
-export const useAuth = () => useContext(AuthContext);
+// Custom Hook
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (!context) throw new Error('useAuth must be used within an AuthProvider');
+    return context;
+};
