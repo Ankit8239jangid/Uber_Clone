@@ -1,14 +1,14 @@
 import React, { createContext, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
+import toast, { Toaster } from 'react-hot-toast';
 // Create AuthContext
 const AuthContext = createContext();
 
 // AuthProvider Component
 export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
-    const [toast, setToast] = useState({ show: true, message: '', type: '' });
+    const [error, setError] = useState('')
     const [isLogin, setIsLogin] = useState(() => !!localStorage.getItem('token') || !!localStorage.getItem('captaintoken'));
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false); // Fixed typo: isloding → isLoading
@@ -57,13 +57,12 @@ export const AuthProvider = ({ children }) => {
             if (!token) throw new Error('No token received');
             localStorage.setItem('token', token);
             setIsLogin(true);
+            toast.success('Login successful!');
             setLoginFormData({ email: '', password: '' });
-            setToast({ show: true, message: `Welcome back, ${FirstName}!`, type: 'success' });
             navigate(`/dashboard?login=true&id=${_id}&name=${FirstName}`);
         } catch (error) {
-            const errorMessage = error.response?.data?.message || 'Login failed. Please check your credentials.';
-            console.error('Login error:', errorMessage); // Log for debugging
-            setToast({ show: true, message: 'jkjkjk', type: 'error' });
+
+            console.log(error.response.data)
         } finally {
             setIsLoading(false);
         }
@@ -80,12 +79,12 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem('token', token);
             setIsLogin(true);
             setSignupFormData({ FirstName: '', LastName: '', email: '', password: '' });
-            setToast({ show: true, message: `Welcome, ${FirstName}! Signup successful.`, type: 'success' });
+            toast.success('Signup successful!');
             navigate(`/dashboard?signup=true&id=${_id}&name=${FirstName}`);
         } catch (error) {
             const errorMessage = error.response?.data?.message || 'Signup failed. Please try again.';
-            setToast({ show: true, message: errorMessage, type: 'error' });
             console.error('Signup error:', error); // Log for debugging
+            toast.error(errorMessage);  // Show error toast
         } finally {
             setIsLoading(false);
         }
@@ -104,12 +103,12 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem('captaintoken', token);
             setIsLogin(true);
             setCaptainLoginFormData({ email: '', password: '' });
-            setToast({ show: true, message: `Welcome back, ${firstname}!`, type: 'success' });
+            toast.success('Captain login successful!');
             navigate(`/captain-dashboard?login=true&id=${_id}&name=${firstname}`);
         } catch (error) {
             const errorMessage = error.response?.data?.message || 'Invalid email or password';
-            setToast({ show: true, message: errorMessage, type: 'error' });
             console.error('Captain login error:', error); // Log for debugging
+            toast.error(errorMessage);  // Show error toast
         } finally {
             setIsLoading(false);
         }
@@ -126,23 +125,19 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem('captaintoken', response.data.token);
             setIsLogin(true);
             setCaptainSignupFormData({
-                firstname: '',
-                lastname: '',
-                email: '',
-                password: '',
-                vehicle: { color: '', plate: '', capacity: '', vehicleType: '' },
-                location: ''
+                firstname: '', lastname: '', email: '', password: '', vehicle: { color: '', plate: '', capacity: '', vehicleType: '' }, location: ''
             });
-            setToast({ show: true, message: `Welcome, ${firstname}! Captain signup successful.`, type: 'success' });
+            toast.success('Captain signup successful!');
             navigate(`/captain-dashboard?captain_register=true&id=${_id}&name=${firstname}`);
         } catch (error) {
             const errorMessage = error.response?.data?.errors?.[0]?.message || 'Captain signup failed.';
-            setToast({ show: true, message: errorMessage, type: 'error' });
             console.error('Captain signup error:', error); // Log for debugging
+            toast.error(errorMessage);  // Show error toast
         } finally {
             setIsLoading(false);
         }
     };
+
 
     // Handle Logout
     const handleLogout = async () => {
@@ -163,12 +158,12 @@ export const AuthProvider = ({ children }) => {
             localStorage.removeItem('token');
             localStorage.removeItem('captaintoken');
             setIsLogin(false);
-            setToast({ show: true, message: 'Logged out successfully!', type: 'success' });
+            toast.success('Logout successfully')
             navigate('/');
         } catch (error) {
             const errorMessage = error.response?.data?.message || 'Logout failed. Please try again.';
-            setToast({ show: true, message: errorMessage, type: 'error' });
-            console.error('Logout error:', error); // Log for debugging
+
+            console.error('Logout error:', errorMessage); // Log for debugging
         } finally {
             setIsLoading(false);
         }
@@ -214,7 +209,7 @@ export const AuthProvider = ({ children }) => {
                 isLoading, // Updated to match fixed typo
                 handleDashboard,
                 toast,
-                setToast
+
             }}
         >
             {children}

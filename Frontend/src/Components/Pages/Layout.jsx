@@ -3,19 +3,16 @@ import Header from './Home/Heder'
 import Footer from './Home/Footer'
 
 import { Outlet } from 'react-router-dom'
-import Toast from '../Toast/Toaster.jsx'
+import { Toaster } from 'react-hot-toast';
 
 function Layout() {
   return (
     <>
       <div className="bg-red-300 h-screen w-full">
-
         <Header />
         <Outlet />
         <Footer />
-        <div className="">
-          <Toast />
-        </div>
+        <Toaster />
       </div>
     </>
   )

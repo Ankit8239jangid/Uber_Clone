@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Github, Twitter, Facebook } from 'lucide-react'; // Fixed import name
 import video from '/video.mp4';
 import { useAuth } from '../../context/AuthContext';
+import toast from 'react-hot-toast';
 
 const UserLoginPage = () => {
     const { loginFormData, handleLoginChange, handleLogin, showPassword, setShowPassword, isLoading } = useAuth();
@@ -91,10 +92,12 @@ const UserLoginPage = () => {
 
                             <button
                                 type="submit"
+                                onClick={() => toast('hihihi')}
+
                                 className="w-full active:scale-50 transition-all  bg-green-500 text-white py-3 rounded-lg font-medium hover:bg-green-600 "
                             >
 
-                                {isLoading ? 'loging' : ' Login with Email'}
+                                {isLoading ? 'Please Wait' : ' Login with Email'}
                             </button>
 
                             <div className="text-xs text-gray-500 text-center">

@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { Twitter } from 'lucide-react';
 import whomanSinupimage from '/Signup.webp';
 import { useAuth } from '../../context/AuthContext';
-import TOAST from '../../Toast/Toaster';
+// import TOAST from '../../Toast/Toaster';
 
 const User_Signup = () => {
     const { signupFormData, handleSignupChange, handleSignup, isloding } = useAuth();

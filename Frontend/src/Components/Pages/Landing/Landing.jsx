@@ -30,7 +30,7 @@ const Landing = () => {
 
     return (
         <div
-            className="min-h-screen bg-cover bg-center md:  bg-top flex items-center justify-center"
+            className="min-h-screen bg-cover bg-center flex items-center justify-center"
             style={{ backgroundImage: `url(${backgroundImage})` }}
         >
             <div className="bg-black bg-opacity-70 w-full min-h-screen flex items-center justify-center">
