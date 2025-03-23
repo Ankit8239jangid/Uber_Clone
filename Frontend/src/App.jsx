@@ -7,16 +7,14 @@ import CaptainRegistration from "./Components/auth/Captain_auth/CaptainRegistrat
 import CaptainLoginPage from "./Components/auth/Captain_auth/Captain_Login"; // Fixed typo
 import ProtectedRoute from "./Components/auth/ProtectedRoute";
 import { AuthProvider } from "./Components/context/AuthContext";
-import Dashboard from "./Components/Dashboard/Dashbord"; // Renamed for consistency
 import CaptainDashboard from "./Components/Dashboard/CaptianDashbord"; // Fixed typo
 import Landing from "./Components/Pages/Landing/Landing";
+import UserDashbord from "./Components/Dashboard/UserDashbord";
 
 
 export default function App() {
   return (
     <BrowserRouter>
-
-
       <AuthProvider>
         <Routes>
           {/* Public routes with Layout */}
@@ -30,7 +28,7 @@ export default function App() {
               path="/dashboard"
               element={
                 <ProtectedRoute>
-                  <Dashboard />
+                  <UserDashbord />
                 </ProtectedRoute>
               }
             />

@@ -1,31 +1,26 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Github, Twitter, Facebook } from 'lucide-react'; // Fixed import name
+import { Github, Twitter, Facebook } from 'lucide-react';
 import video from '/video.mp4';
 import { useAuth } from '../../context/AuthContext';
-import toast from 'react-hot-toast';
 
 const UserLoginPage = () => {
-    const { loginFormData, handleLoginChange, handleLogin, showPassword, setShowPassword, isLoading } = useAuth();
+    const {
+        loginFormData, handleLoginChange, handleLogin,
+        showPassword, setShowPassword, isLoading
+    } = useAuth();
+
     const navigate = useNavigate();
+
+    // Memoize password toggle function to prevent re-creation
+    const togglePasswordVisibility = useCallback(() => {
+        setShowPassword(prev => !prev);
+    }, [setShowPassword]);
 
     return (
         <div className="flex h-screen w-screen md:p-4 p-2 bg-green-100">
             <div className="flex flex-col w-full h-full max-w-5xl mx-auto bg-white rounded-lg shadow-lg">
-                {/* Main content */}
                 <div className="flex md:flex-row flex-col h-full">
-                    {/* Left side - Video Illustration */}
-                    <div className="md:w-1/2 w-full">
-                        <div className="h-full w-full rounded-xl overflow-hidden">
-                            <video
-                                src={video}
-                                muted
-                                autoPlay
-                                loop
-                                className="w-full h-full object-cover"
-                            />
-                        </div>
-                    </div>
 
                     {/* Right side - Login form */}
                     <div className="md:w-1/2 h-full p-8 flex flex-col justify-center">
@@ -65,7 +60,7 @@ const UserLoginPage = () => {
                                 />
                                 <button
                                     type="button"
-                                    onClick={() => setShowPassword(!showPassword)}
+                                    onClick={togglePasswordVisibility}
                                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
                                     aria-label={showPassword ? 'Hide password' : 'Show password'}
                                 >
@@ -92,24 +87,18 @@ const UserLoginPage = () => {
 
                             <button
                                 type="submit"
-                                onClick={() => toast('hihihi')}
-
-                                className="w-full active:scale-50 transition-all  bg-green-500 text-white py-3 rounded-lg font-medium hover:bg-green-600 "
+                                className="w-full active:scale-95 transition-all bg-green-500 text-white py-3 rounded-lg font-medium hover:bg-green-600"
+                                disabled={isLoading}
                             >
-
-                                {isLoading ? 'Please Wait' : ' Login with Email'}
+                                {isLoading ? 'Please Wait' : 'Login with Email'}
                             </button>
 
                             <div className="text-xs text-gray-500 text-center">
                                 <p>
                                     By continuing, you agree to Uber's{' '}
-                                    <a href="#" className="underline">
-                                        Terms of Service
-                                    </a>{' '}
+                                    <a href="#" className="underline">Terms of Service</a>{' '}
                                     and{' '}
-                                    <a href="#" className="underline">
-                                        Privacy Policy
-                                    </a>.
+                                    <a href="#" className="underline">Privacy Policy</a>.
                                 </p>
                             </div>
 
@@ -120,27 +109,15 @@ const UserLoginPage = () => {
                             </div>
 
                             <div className="grid grid-cols-3 gap-2">
-                                <button
-                                    type="button"
-                                    className="flex items-center justify-center p-2 border rounded-lg hover:bg-gray-50"
-                                    aria-label="Login with GitHub"
-                                >
-                                    <Github className="h-6 w-6" />
-                                </button>
-                                <button
-                                    type="button"
-                                    className="flex items-center justify-center p-2 border rounded-lg hover:bg-gray-50"
-                                    aria-label="Login with Twitter"
-                                >
-                                    <Twitter className="h-6 w-6" />
-                                </button>
-                                <button
-                                    type="button"
-                                    className="flex items-center justify-center p-2 border rounded-lg hover:bg-gray-50"
-                                    aria-label="Login with Facebook"
-                                >
-                                    <Facebook className="h-6 w-6" />
-                                </button>
+                                {[Github, Twitter, Facebook].map((Icon, index) => (
+                                    <button
+                                        key={index}
+                                        type="button"
+                                        className="flex items-center justify-center p-2 border rounded-lg hover:bg-gray-50"
+                                    >
+                                        <Icon className="h-6 w-6" />
+                                    </button>
+                                ))}
                             </div>
 
                             <div className="text-center text-sm mt-4">
@@ -149,10 +126,23 @@ const UserLoginPage = () => {
                                     onClick={() => navigate('/user-signup')}
                                     className="text-blue-500 hover:underline ml-1"
                                 >
-                                    {isLoading ? 'loging' : ' Go to Sign-up'}
+                                    Go to Sign-up
                                 </button>
                             </div>
                         </form>
+                    </div>
+
+                    {/* Left side - Video Illustration */}
+                    <div className="md:w-1/2 w-full">
+                        <div className="h-full w-full rounded-xl overflow-hidden">
+                            <video
+                                src={video}
+                                muted
+                                autoPlay
+                                loop
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

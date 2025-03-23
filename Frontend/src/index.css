@@ -5,12 +5,12 @@
 
   /* Custom Scrollbar */
 ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 0px;
+    height: 2px;
   }
   
   ::-webkit-scrollbar-track {
-    background: #e5e7eb;
+    background: #ffff;
     border-radius: 10px;
   }
   

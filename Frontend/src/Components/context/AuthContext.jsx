@@ -8,7 +8,7 @@ const AuthContext = createContext();
 // AuthProvider Component
 export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
-    const [error, setError] = useState('')
+
     const [isLogin, setIsLogin] = useState(() => !!localStorage.getItem('token') || !!localStorage.getItem('captaintoken'));
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false); // Fixed typo: isloding → isLoading
@@ -61,8 +61,8 @@ export const AuthProvider = ({ children }) => {
             setLoginFormData({ email: '', password: '' });
             navigate(`/dashboard?login=true&id=${_id}&name=${FirstName}`);
         } catch (error) {
-
-            console.log(error.response.data)
+            const errorMessage = error?.response?.data?.message || 'Login failed. Please try again.';
+            toast.error(errorMessage);
         } finally {
             setIsLoading(false);
         }
@@ -82,9 +82,8 @@ export const AuthProvider = ({ children }) => {
             toast.success('Signup successful!');
             navigate(`/dashboard?signup=true&id=${_id}&name=${FirstName}`);
         } catch (error) {
-            const errorMessage = error.response?.data?.message || 'Signup failed. Please try again.';
-            console.error('Signup error:', error); // Log for debugging
-            toast.error(errorMessage);  // Show error toast
+            const errorMessage = error?.response?.data?.message || error?.response?.data?.errors[0]?.message;
+            toast.error(errorMessage);
         } finally {
             setIsLoading(false);
         }
@@ -106,9 +105,8 @@ export const AuthProvider = ({ children }) => {
             toast.success('Captain login successful!');
             navigate(`/captain-dashboard?login=true&id=${_id}&name=${firstname}`);
         } catch (error) {
-            const errorMessage = error.response?.data?.message || 'Invalid email or password';
-            console.error('Captain login error:', error); // Log for debugging
-            toast.error(errorMessage);  // Show error toast
+            const errorMessage = error?.response?.data?.message || 'Invalid email or password';
+            toast.error(errorMessage);
         } finally {
             setIsLoading(false);
         }
@@ -130,9 +128,9 @@ export const AuthProvider = ({ children }) => {
             toast.success('Captain signup successful!');
             navigate(`/captain-dashboard?captain_register=true&id=${_id}&name=${firstname}`);
         } catch (error) {
-            const errorMessage = error.response?.data?.errors?.[0]?.message || 'Captain signup failed.';
-            console.error('Captain signup error:', error); // Log for debugging
-            toast.error(errorMessage);  // Show error toast
+            const errorMessage = error?.response?.data?.message || error?.response?.data?.errors[0].message;
+            toast.error(errorMessage);
+            // console.log(errorMessage)
         } finally {
             setIsLoading(false);
         }
@@ -163,7 +161,6 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
             const errorMessage = error.response?.data?.message || 'Logout failed. Please try again.';
 
-            console.error('Logout error:', errorMessage); // Log for debugging
         } finally {
             setIsLoading(false);
         }
@@ -209,6 +206,7 @@ export const AuthProvider = ({ children }) => {
                 isLoading, // Updated to match fixed typo
                 handleDashboard,
                 toast,
+
 
             }}
         >

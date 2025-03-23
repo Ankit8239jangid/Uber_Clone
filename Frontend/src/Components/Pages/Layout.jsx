@@ -3,7 +3,7 @@ import Header from './Home/Heder'
 import Footer from './Home/Footer'
 
 import { Outlet } from 'react-router-dom'
-import { Toaster } from 'react-hot-toast';
+// import { Toaster } from 'react-hot-toast';
 
 function Layout() {
   return (
@@ -12,7 +12,7 @@ function Layout() {
         <Header />
         <Outlet />
         <Footer />
-        <Toaster />
+      
       </div>
     </>
   )
