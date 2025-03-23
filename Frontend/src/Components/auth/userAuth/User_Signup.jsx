@@ -9,7 +9,7 @@ const User_Signup = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-zinc-200 to-green-300 flex items-center justify-center p-4">
+        <div className="min-h-screen   pt-14 bg-gradient-to-b from-zinc-200 to-green-300 flex items-center justify-center p-4">
             
             <div className="bg-white rounded-xl shadow-lg overflow-hidden w-full max-w-4xl flex flex-col md:flex-row">
                 {/* Left Column - Form Section */}

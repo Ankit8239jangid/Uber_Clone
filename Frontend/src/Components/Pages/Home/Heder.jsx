@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, MoonStar, Sun, X } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 const navLinks = ["Ride", "Drive", "Business", "About"];
 
 const Header = () => {
-    const { handleLogout, isLogin, handleDashboard } = useAuth();
+    const { handleLogout, isLogin, handleDashboard, ThemMode, setThemMode } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
 
@@ -71,6 +71,10 @@ const Header = () => {
                             </button>
                         </>
                     )}
+                    <button className="md:hidden" onClick={() => setThemMode(!ThemMode)}>
+                        {!ThemMode ? <MoonStar className="w-6 h-6" /> : <Sun className="w-6 h-6" />}
+                    </button>
+
                     <button className="md:hidden" onClick={toggleMenu}>
                         {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
                     </button>
@@ -130,7 +134,7 @@ const Header = () => {
                         </button>
                         <button
                             onClick={() => {
-                                navigate('/user-signup');
+                                navigate('/Landing');
                                 toggleMenu();
                             }}
                             className="mt-4 bg-white text-black px-6 py-3 rounded hover:bg-gray-200 transition duration-300 text-xl"

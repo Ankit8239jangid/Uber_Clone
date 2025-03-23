@@ -41,13 +41,13 @@ export default function App() {
               }
             />
 
+            {/* Auth routes */}
+            <Route path="/user-login" element={<UserLoginPage />} />
+            <Route path="/user-signup" element={<User_Signup />} />
+            <Route path="/captain-registration" element={<CaptainRegistration />} />
+            <Route path="/captain-login" element={<CaptainLoginPage />} />
           </Route>
 
-          {/* Auth routes */}
-          <Route path="/user-signup" element={<User_Signup />} />
-          <Route path="/user-login" element={<UserLoginPage />} />
-          <Route path="/captain-registration" element={<CaptainRegistration />} />
-          <Route path="/captain-login" element={<CaptainLoginPage />} />
 
         </Routes>
       </AuthProvider>

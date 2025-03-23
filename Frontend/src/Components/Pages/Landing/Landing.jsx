@@ -1,103 +1,57 @@
-// src/Components/Pages/Home/Landing.jsx
-import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Car, User, LogIn, UserPlus } from 'lucide-react';
-import backgroundImage from '/3d.jpg'; // Add your background image
+import { Car, User } from 'lucide-react';
 
 const Landing = () => {
     const navigate = useNavigate();
-    const [role, setRole] = useState(null); // 'user' or 'captain'
-    const [action, setAction] = useState(null); // 'login' or 'signup'
 
-    const handleRoleSelection = (selectedRole) => {
-        setRole(selectedRole);
-    };
-
-    const handleActionSelection = (selectedAction) => {
-        setAction(selectedAction);
-        if (role) {
-            redirectUser(selectedAction);
-        }
-    };
-
-    const redirectUser = (selectedAction) => {
-        if (role === 'user') {
-            navigate(selectedAction === 'login' ? '/user-login' : '/user-signup');
-        } else if (role === 'captain') {
-            navigate(selectedAction === 'login' ? '/captain-login' : '/captain-registration');
-        }
+    const handleNavigation = (role) => {
+        navigate(role === 'user' ? '/user-signup' : '/captain-registration');
     };
 
     return (
-        <div
-            className="min-h-screen bg-cover bg-center flex items-center justify-center"
-            style={{ backgroundImage: `url(${backgroundImage})` }}
-        >
-            <div className="bg-black bg-opacity-70 w-full min-h-screen flex items-center justify-center">
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-                    <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">
-                        Welcome to Your Ride
+        <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4">
+            <div className="max-w-2xl w-full bg-white/5 backdrop-blur-xl rounded-2xl p-8 shadow-2xl border border-gray-800/50">
+                <div className="text-center mb-10">
+                    <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+                        Ride Your Way
                     </h1>
-                    <p className="text-lg sm:text-xl md:text-2xl mb-8">
-                        Get moving with ease—whether you’re riding or driving.
+                    <p className="text-gray-400 mt-2 text-sm md:text-base">
+                        Choose how you want to get started
                     </p>
+                </div>
 
-                    {/* Role Selection */}
-                    <div className="mb-8">
-                        <h2 className="text-2xl font-semibold mb-4">Who are you?</h2>
-                        <div className="flex flex-col sm:flex-row justify-center gap-4">
-                            <button
-                                onClick={() => handleRoleSelection('user')}
-                                className={`flex items-center justify-center gap-2 px-6 py-3 rounded-lg text-lg font-medium transition-colors ${
-                                    role === 'user'
-                                        ? 'bg-green-500 text-white'
-                                        : 'bg-white text-black hover:bg-gray-200'
-                                }`}
-                            >
-                                <User className="w-6 h-6" />
-                                User
-                            </button>
-                            <button
-                                onClick={() => handleRoleSelection('captain')}
-                                className={`flex items-center justify-center gap-2 px-6 py-3 rounded-lg text-lg font-medium transition-colors ${
-                                    role === 'captain'
-                                        ? 'bg-green-500 text-white'
-                                        : 'bg-white text-black hover:bg-gray-200'
-                                }`}
-                            >
-                                <Car className="w-6 h-6" />
-                                Captain
-                            </button>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                    <button
+                        onClick={() => handleNavigation('user')}
+                        className="group relative overflow-hidden bg-white/10 p-6 rounded-xl border border-gray-700/50 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    >
+                        <div className="flex flex-col items-center gap-3">
+                            <User className="w-10 h-10 text-green-400 group-hover:scale-110 transition-transform" />
+                            <span className="text-white font-medium text-lg">
+                                Ride with Us
+                            </span>
+                            <span className="text-gray-400 text-sm">
+                                Book your journey now
+                            </span>
                         </div>
-                    </div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-green-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </button>
 
-                    {/* Action Selection */}
-                    {role && (
-                        <div className="mb-8">
-                            <h2 className="text-2xl font-semibold mb-4">What would you like to do?</h2>
-                            <div className="flex flex-col sm:flex-row justify-center gap-4">
-                                <button
-                                    onClick={() => handleActionSelection('login')}
-                                    className="flex items-center justify-center gap-2 px-6 py-3 bg-white text-black rounded-lg text-lg font-medium hover:bg-gray-200 transition-colors"
-                                >
-                                    <LogIn className="w-6 h-6" />
-                                    Log In
-                                </button>
-                                <button
-                                    onClick={() => handleActionSelection('signup')}
-                                    className="flex items-center justify-center gap-2 px-6 py-3 bg-white text-black rounded-lg text-lg font-medium hover:bg-gray-200 transition-colors"
-                                >
-                                    <UserPlus className="w-6 h-6" />
-                                    Sign Up
-                                </button>
-                            </div>
+                    <button
+                        onClick={() => handleNavigation('captain')}
+                        className="group relative overflow-hidden bg-white/10 p-6 rounded-xl border border-gray-700/50 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    >
+                        <div className="flex flex-col items-center gap-3">
+                            <Car className="w-10 h-10 text-green-400 group-hover:scale-110 transition-transform" />
+                            <span className="text-white font-medium text-lg">
+                                Drive with Us
+                            </span>
+                            <span className="text-gray-400 text-sm">
+                                Start earning today
+                            </span>
                         </div>
-                    )}
-
-                    {/* Footer Note */}
-                    <p className="text-sm text-gray-300">
-                        Join thousands of riders and drivers already on the move.
-                    </p>
+                        <div className="absolute inset-0 bg-gradient-to-t from-green-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </button>
                 </div>
             </div>
         </div>

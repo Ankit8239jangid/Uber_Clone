@@ -8,7 +8,7 @@ const Hero = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="bg-white text-black min-h-screen">
+        <div className="bg-white  text-black  min-h-screen">
             {/* Hero Section */}
             <section className="bg-black grid grid-cols-1 md:grid-cols-2 gap-6 px-6 py-12 max-w-7xl mx-auto items-center mt-10">
                 <div className="space-y-6 text-center md:text-left text-white">
@@ -105,11 +105,11 @@ const Hero = () => {
             ))}
 
             {/* Apps Section */}
-            <section className="px-6 py-12 max-w-7xl mx-auto bg-gray-100 text-center">
+            <section className="px-6 py-12 max-w-7xl mx-auto bg-transparent text-center">
                 <h2 className="text-3xl font-bold mb-6">It's easier in the apps</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {businessData.apps.map((app, index) => (
-                        <div key={index} className="bg-white p-6 rounded-lg shadow">
+                        <div key={index} className="bg-transparent p-6 rounded-lg shadow-lg">
                             <img loading='lazy' src={app.imageUrl} alt={app.altText} className="mx-auto mb-4 object-cover rounded-lg" />
                             <p className="text-lg">{app.title}</p>
                             <p className="text-gray-500">{app.description}</p>

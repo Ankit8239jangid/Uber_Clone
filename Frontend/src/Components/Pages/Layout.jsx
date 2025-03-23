@@ -8,12 +8,12 @@ import { Outlet } from 'react-router-dom'
 function Layout() {
   return (
     <>
-      <div className="bg-red-300 h-screen w-full">
+  
         <Header />
         <Outlet />
         <Footer />
+
       
-      </div>
     </>
   )
 }

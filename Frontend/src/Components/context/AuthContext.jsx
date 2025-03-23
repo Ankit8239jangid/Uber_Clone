@@ -8,7 +8,7 @@ const AuthContext = createContext();
 // AuthProvider Component
 export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
-
+    const [ThemMode, setThemMode] = useState(false)
     const [isLogin, setIsLogin] = useState(() => !!localStorage.getItem('token') || !!localStorage.getItem('captaintoken'));
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false); // Fixed typo: isloding → isLoading
@@ -82,7 +82,7 @@ export const AuthProvider = ({ children }) => {
             toast.success('Signup successful!');
             navigate(`/dashboard?signup=true&id=${_id}&name=${FirstName}`);
         } catch (error) {
-            const errorMessage = error?.response?.data?.message || error?.response?.data?.errors[0]?.message;
+            const errorMessage = error?.response?.data?.message || error?.response?.data?.errors[0]?.message || 'Internal server error tray after some time';
             toast.error(errorMessage);
         } finally {
             setIsLoading(false);
@@ -107,6 +107,7 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
             const errorMessage = error?.response?.data?.message || 'Invalid email or password';
             toast.error(errorMessage);
+
         } finally {
             setIsLoading(false);
         }
@@ -128,7 +129,7 @@ export const AuthProvider = ({ children }) => {
             toast.success('Captain signup successful!');
             navigate(`/captain-dashboard?captain_register=true&id=${_id}&name=${firstname}`);
         } catch (error) {
-            const errorMessage = error?.response?.data?.message || error?.response?.data?.errors[0].message;
+            const errorMessage = error?.response?.data?.message || error?.response?.data?.errors[0].message || 'Internal server error';
             toast.error(errorMessage);
             // console.log(errorMessage)
         } finally {
@@ -206,6 +207,8 @@ export const AuthProvider = ({ children }) => {
                 isLoading, // Updated to match fixed typo
                 handleDashboard,
                 toast,
+                ThemMode,
+                setThemMode
 
 
             }}
