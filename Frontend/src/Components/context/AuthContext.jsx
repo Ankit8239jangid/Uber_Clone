@@ -8,7 +8,7 @@ const AuthContext = createContext();
 // AuthProvider Component
 export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
-    const [ThemMode, setThemMode] = useState(false)
+
     const [isLogin, setIsLogin] = useState(() => !!localStorage.getItem('token') || !!localStorage.getItem('captaintoken'));
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false); // Fixed typo: isloding → isLoading
@@ -207,8 +207,7 @@ export const AuthProvider = ({ children }) => {
                 isLoading, // Updated to match fixed typo
                 handleDashboard,
                 toast,
-                ThemMode,
-                setThemMode
+
 
 
             }}

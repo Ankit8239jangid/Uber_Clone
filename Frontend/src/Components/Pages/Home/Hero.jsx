@@ -58,7 +58,7 @@ const Hero = () => {
                 <h2 className="text-3xl font-bold mb-6">Suggestions</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {businessData.services.map((item, index) => (
-                        <div key={index} className="bg-gray-100 p-4 rounded-lg shadow flex flex-col md:flex-row items-center justify-between">
+                        <div key={index} className="bg-gray-100  p-4 rounded-lg shadow flex flex-col md:flex-row items-center justify-between">
                             <div className="flex-1">
                                 <h3 className="text-lg font-semibold">{item.title}</h3>
                                 <p className="mt-2">{item.description}</p>
@@ -79,7 +79,7 @@ const Hero = () => {
             {businessData.sections.map((section, index) => (
                 <section
                     key={index}
-                    className={`flex flex-col md:flex-row items-center justify-between px-5 gap-5 py-12 max-w-7xl mx-auto ${section.reverse ? 'md:flex-row-reverse' : ''}`}
+                    className={`flex  flex-col md:flex-row items-center justify-between px-5 gap-5 py-12 max-w-7xl mx-auto ${section.reverse ? 'md:flex-row-reverse' : ''}`}
                 >
                     <div className="w-full md:w-1/2 space-y-6 text-center md:text-left">
                         <h1 className="text-3xl md:text-5xl font-bold">{section.title}</h1>

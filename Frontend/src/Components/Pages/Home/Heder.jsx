@@ -6,7 +6,7 @@ import { useAuth } from "../../context/AuthContext";
 const navLinks = ["Ride", "Drive", "Business", "About"];
 
 const Header = () => {
-    const { handleLogout, isLogin, handleDashboard, ThemMode, setThemMode } = useAuth();
+    const { handleLogout, isLogin, handleDashboard, } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
 
@@ -71,9 +71,7 @@ const Header = () => {
                             </button>
                         </>
                     )}
-                    <button className="md:hidden" onClick={() => setThemMode(!ThemMode)}>
-                        {!ThemMode ? <MoonStar className="w-6 h-6" /> : <Sun className="w-6 h-6" />}
-                    </button>
+
 
                     <button className="md:hidden" onClick={toggleMenu}>
                         {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}

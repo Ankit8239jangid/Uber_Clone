@@ -86,14 +86,4 @@ export const businessData = {
             imageUrl: "https://mobile-content.uber.com/uber_reserve/reserve_clock.png",
         },
     ],
-    Slaidesimages: [
-        "https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_1152,w_1152/v1684887108/assets/76/baf1ea-385a-408c-846b-59211086196c/original/u4b-square.png",
-
-        'https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_768,w_1152/v1555540623/assets/cb/9b789f-167d-4a57-ac3a-c23060bfa9e8/original/170830_DaraAllHands_0I7A9940_R2.jpg',
-
-        'https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_1152,w_1152/v1684855112/assets/96/4dd3d1-94e7-481e-b28c-08d59353b9e0/original/earner-illustra.png',
-
-        'https://imgs.search.brave.com/FVbMK8IWLjhQojPeHWmWsYSdeSEbRglpKxa8eO4niJY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzAzLzk3LzA4LzI0/LzM2MF9GXzM5NzA4/MjQzNF92UkhOZHZM/aEl3eGxHTHJ4YnBS/bVJFYjNmcHBlUllN/RC5qcGc',
-        
-    ]
 };
