@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import SearchInput from '../Dashboard/UserDashbord_Component/SearchInput';
-import RideOptionCard from '../Dashboard/UserDashbord_Component/RideOptionCard';
-import SearchResults from '../Dashboard/UserDashbord_Component/SearchResults';
-import { Car, Landmark, MapPin, Globe, Building, Home, Mountain, Sun, TreePine, Ship, Compass } from "lucide-react";
+import SearchInput from './SearchInput';
+import RideOptionCard from './RideOptionCard';
+import SearchResults from './SearchResults';
 
 const data = [
     { id: 1, state: "California", address: "123 Main St, Los Angeles, CA 90001", icon: <Landmark /> },
@@ -39,10 +38,10 @@ function UserDashboard() {
     const [isSearchbox, setIsSearchbox] = useState(false);
     const [location, setLocation] = useState('');
     const [destination, setDestination] = useState('');
-   
+    const [selectedRide, setSelectedRide] = useState(null);
 
     const handleRideSelect = (ride) => {
-        setLocation(ride.name);
+        setLocation(ride.name); // You can adjust this to use address from `data` if needed
         setDestination(`Price: ${ride.price}, ETA: ${ride.eta}`);
         setIsInputClicked(false);
         setIsSearchbox(false);
