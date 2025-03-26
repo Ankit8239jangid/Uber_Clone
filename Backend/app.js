@@ -12,7 +12,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-    origin: 'http://localhost:5173', // Allow requests from your frontend
+    origin: '*', // Allow requests from any origin
     credentials: true, // Allow cookies & authorization headers
 }));
 app.use(express.json());

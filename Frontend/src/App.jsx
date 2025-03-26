@@ -27,15 +27,15 @@ export default function App() {
             <Route
               path="/dashboard"
               element={
-                // <ProtectedRoute>
+                <ProtectedRoute>
                   <UserDashbord />
-                // </ProtectedRoute>
+                </ProtectedRoute>
               }
             />
             <Route
               path="/captain-dashboard"
               element={
-                // <ProtectedRoute captainOnly={true}>
+                <ProtectedRoute captainOnly={true}>
                   <CaptainDashboard />
                 // </ProtectedRoute>
               }
