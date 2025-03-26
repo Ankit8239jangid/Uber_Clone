@@ -12,7 +12,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-    origin: '*', // Allow requests from any origin
+    origin: 'https://uber-by-ankit.vercel.app', // Allow requests from your frontend
     credentials: true, // Allow cookies & authorization headers
 }));
 app.use(express.json());
